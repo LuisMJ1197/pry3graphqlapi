@@ -15,8 +15,8 @@ tunnelFunc = (async () => {
 
 server.start(() => {
   console.log(`Server is running on http://localhost:4000`);
-  tunnelFunc();
-  console.log("All init.");
+  //tunnelFunc();
+  //console.log("All init.");
 });
 
  
