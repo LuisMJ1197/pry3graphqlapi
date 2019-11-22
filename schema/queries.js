@@ -136,13 +136,12 @@ function getEmpresaConcursos(parent) {
 }
 
 const getNombresUsuarioEmpresas = (parent, args) => {
-    const query = `SELECT nombreusuario FROM empresas WHERE nombreusuario=$1`;
-    const values = [args.nombreusuario];
+    const query = `SELECT nombreusuario FROM empresas`;
     return db
-        .oneOrNone(query, values)
+        .multi(query, [])
         .then(res => {
-            if (res != null) {
-                return res.nombreusuario
+            if (res[0] != null) {
+                return res[0].map(x => x.nombreusuario)
             } else {
                  return null;
             }
@@ -151,13 +150,12 @@ const getNombresUsuarioEmpresas = (parent, args) => {
 }
 
 const getNombresUsuarioPersonas = (parent, args) => {
-    const query = `SELECT nombreusuario FROM personas WHERE nombreusuario=$1`;
-    const values = [args.nombreusuario];
+    const query = `SELECT nombreusuario FROM personas`;
     return db
-        .oneOrNone(query, values)
+        .multi(query, [])
         .then(res => {
-            if (res != null) {
-                return res.nombreusuario
+            if (res[0] != null) {
+                return res[0].map(x => x.nombreusuario)
             } else {
                  return null;
             }

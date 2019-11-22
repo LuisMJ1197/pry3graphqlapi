@@ -9,8 +9,8 @@ type Query {
     getNivelesIdioma: [String],
     getPaises: [String],
     getTipoInstitucion: [String],
-    getNombresUsuarioEmpresas(nombreusuario: String!): String,
-    getNombresUsuarioPersonas(nombreusuario: String!): String
+    getNombresUsuarioEmpresas: [String],
+    getNombresUsuarioPersonas: [String]
 }
 
 type Mutation {
