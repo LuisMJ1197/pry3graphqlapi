@@ -166,9 +166,29 @@ const getNombresUsuarioPersonas = (parent, args) => {
 /* UTILS */
 
 const getDirecciones = (parent, args) => {
-    const query = `SELECT * FROM direccionesV`;
+    const query = `SELECT cod as provinciacod, nombre as provincia FROM provincia`;
     return db
         .multi(query, [])
+        .then(res => res[0])
+        .catch(err => err);
+}
+
+function getCantonesPorProvincia(parent) {
+    const query = `SELECT provincia.cod as provinciacod, canton.canton as cantoncod, canton.nombre as canton FROM canton INNER JOIN provincia ON canton.provincia = provincia.cod
+    WHERE provincia.cod = $1`;
+    return db
+        .multi(query, [parent.provinciacod])
+        .then(res => res[0])
+        .catch(err => err);
+}
+
+function getDistritosPorCanton(parent) {
+    const query = `SELECT distrito.distrito as distritocod, distrito.nombre as distrito 
+                   FROM distrito INNER JOIN canton ON distrito.canton = canton.canton
+                    INNER JOIN provincia ON distrito.provincia = provincia.cod AND distrito.canton = canton.canton AND canton.provincia = provincia.cod
+                    WHERE provincia.cod = $1 AND canton.canton = $2`;
+    return db
+        .multi(query, [parent.provinciacod, parent.cantoncod])
         .then(res => res[0])
         .catch(err => err);
 }
@@ -233,6 +253,8 @@ module.exports = {
     getNombresUsuarioPersonas,
 
     getDirecciones,
+    getCantonesPorProvincia,
+    getDistritosPorCanton,
     getIdiomas,
     getTiposSoftware,
     getNivelesIdioma,

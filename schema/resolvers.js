@@ -1,6 +1,5 @@
 const { GraphQLScalarType } = require('graphql');
 const { Kind } = require('graphql/language');
-var dateFormat = require('../util/dateformat');
 const queries = require('./queries');
 const mutations = require('./mutations');
 
@@ -43,6 +42,12 @@ const resolvers = {
 	Empresa: {
 		concursos(parent, args, cts, info) { return queries.getEmpresaConcursos(parent); }
 	},
+	Provincia: {
+		cantones(parent, args, cts, info) { return queries.getCantonesPorProvincia(parent); }
+	},
+	Canton: {
+		distritos(parent, args, cts, info) { return queries.getDistritosPorCanton(parent); }
+	},
 	Mutation: {
 	    crearPersona: mutations.crearPersona,
 	    actualizarPersona: mutations.actualizarPersona,
@@ -58,25 +63,11 @@ const resolvers = {
 		agregarDominiosPorConcurso: mutations.agregarDominiosPorConcurso,
 		agregarIdiomasPorConcurso: mutations.agregarIdiomasPorConcurso,
 		agregarResponsabilidadesPorConcurso: mutations.agregarResponsabilidadesPorConcurso,
-		agregarPersonaConcurso: mutations.agregarPersonaConcurso
-	},
-
-
-	Date: new GraphQLScalarType({
-		name: 'Date',
-		description: 'Date custom scalar type',
-		parseValue(value) {
-			return new Date(value); // value from the client
-		},
-		serialize(value) {
-			return value.format("yyyy-mm-dd"); // value sent to the client
-		},
-		parseLiteral(ast) {
-			if (ast.kind === Kind.INT) {
-				return parseInt(ast.value, 10); // ast value is always in string format
-			}
-			return null;
-	}})
+		agregarPersonaConcurso: mutations.agregarPersonaConcurso,
+		actualizarPersonaImage: mutations.actualizarPersonaImage
+	}
 }
 
 exports.resolvers = resolvers;
+
+//actualizarPersona(nombreusuario: String!, contrasenia: String!, apellido1: String!, apellido2: String!, email: String!, nombre: String!,

@@ -14,13 +14,25 @@ const actualizarPersona = (parent, args) => {
     const query = `UPDATE personas
     SET apellido1=$2, apellido2=$3, email=$4, nombre=$5, fechadenacimiento=$6, nacionalidad=$7,
     provincia=$8, canton=$9, distrito=$10, telefono1=$11, telefono2=$12, sitioweb=$13, fotografia=$14 WHERE nombreusuario=$1; SELECT 1;`;
-    const values = [args.nombreusuario, args.apellido1, args. apellido2, args.email, args.nombre, args.fechadenacimiento,args.nacionalidad,
-     args.provincia, args. canton, args. distrito, args. telefono1, args.telefono2, args. sitioweb, args. fotografia];
+    
+    const values = [args.persona.nombreusuario, args.persona.apellido1, args.persona. apellido2, args.persona.email, args.persona.nombre, args.persona.fechadenacimiento,args.persona.nacionalidad,
+     args.persona.provincia, args.persona. canton, args.persona. distrito, args.persona. telefono1, args.persona.telefono2, args.persona.sitioweb, args.persona.fotografia];
+     console.log(args.persona);
     return db
       .one(query, values)
       .then(res => res = {success: true, message: "Persona actualizada."})
-      .catch(err => err = {success: false, message: messages.getMessage(err.code)}); //err = {success: false, message: messages.getMessage(err.code)}
+      .catch(err => {console.log(err); return {success: false, message: messages.getMessage(err.code)};}); //err = {success: false, message: messages.getMessage(err.code)}
   
+}
+
+const actualizarPersonaImage = (parent, args) => {
+  const query = `UPDATE personas SET fotografia = $1 WHERE nombreusuario = $2`;
+  const values = [args.fotografia, args.nombreusuario]
+  return db
+    .oneOrNone(query, values)
+    .then(res => res = {success: true, message: "Persona actualizada."})
+    .catch(err => err = {success: false, message: messages.getMessage(err.code)}); //err = {success: false, message: messages.getMessage(err.code)}
+
 }
 
 const agregarIdiomasPorPersona = (parent, args) => {
@@ -311,5 +323,6 @@ module.exports = {
     agregarDominiosPorConcurso,
     agregarIdiomasPorConcurso,
     agregarResponsabilidadesPorConcurso,
-    agregarPersonaConcurso
+    agregarPersonaConcurso,
+    actualizarPersonaImage
 }

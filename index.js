@@ -1,22 +1,15 @@
-const graphql = require("graphql-yoga");
-const { GraphQLSchema } = graphql;
-const { resolvers } = require("./schema/resolvers");
-const localtunnel = require('localtunnel');
- 
-const server = new graphql.GraphQLServer({
-  typeDefs: `./schema/schema.graphql`,
-  resolvers,
-});
+const express  = require('express');
+const bodyParser = require('body-parser');
+const { ApolloServer } = require('apollo-server-express');
+const resolvers = require('./schema/resolvers');
+const schema = require('./schema/schema');
 
-tunnelFunc = (async () => {
-  const tunnel = await localtunnel({port: 4000, subdomain: "bindin"});
-  console.log("Localtunnel is on. URL: " + tunnel.url);
-});
+const app = express();
+app.use("/", bodyParser.json({limit: '50mb'}));
+const server = new ApolloServer({ typeDefs: schema.schema, resolvers: resolvers.resolvers });
+server.applyMiddleware({ app, path: '/'});
+// bodyParser is needed just for POST.
 
-server.start(() => {
-  console.log(`Server is running on http://localhost:4000`);
-  //tunnelFunc();
-  //console.log("All init.");
-});
-
- 
+app.listen({ port: 4000 }, () =>
+  console.log(`Server ready at http://localhost:4000${server.graphqlPath}`)
+);
