@@ -16,6 +16,30 @@ type Query {
     getNombresUsuarioPersonas: [String]
 }
 
+type Mutation {
+    crearPersona(nombreusuario: String!, contrasenia: String!, nombre: String!, apellido1: String!, apellido2: String!, email: String!,
+     fechadenacimiento: String!, nacionalidad: String!): Result!,
+    actualizarPersona(persona: PersonaInput): Result!,
+    agregarIdiomasPorPersona(nombreusuario: String!, idiomas: [IdiomaInput]): Result!,
+    agregarEstudiosPorPersona(nombreusuario: String, estudios: [EstudioInput]): Result!,
+    agregarCertificacionesPorPersona(nombreusuario: String!, certificaciones: [CertificacionInput]): Result!,
+    agregarExperienciasPorPersona(nombreusuario: String!, experiencia: [ExperienciaInput]): Result!,
+    agregarDominioPorExperiencia(numeroexperiencia: Int!, nombreusuario: String!, dominios: [DominioExperienciaInput]): Result!
+
+    crearEmpresa(nombreusuario: String!, contrasenia: String!, email: String!, nombre: String!): Result!,
+    actualizarEmpresa(empresa: EmpresaInput): Result!,
+    crearConcurso(empresa: String!, nombredelpuesto: String!, fechaderegistro: String!, fechadecaducidad: String!, descripcion: String!): Result!,
+    agregarCertificacionesPorConcurso(idconcurso: Int!, certificaciones: [CertificacionConcursoInput]): Result!,
+    agregarDominiosPorConcurso(idconcurso: Int!, dominios: [DominioConcursoInput]): Result!,
+    agregarIdiomasPorConcurso(idconcurso: Int!, idiomas: [IdiomaConcursoInput]): Result!,
+    agregarResponsabilidadesPorConcurso(idconcurso: Int!, responsabilidades: [String]): Result!,
+
+    agregarPersonaConcurso(nombreusuario: String!, idconcurso: Int): Result!,
+
+    actualizarPersonaImage(nombreusuario: String, fotografia: String): Result!,
+    actualizarEmpresaImage(nombreusuario: String, logo: String): Result!,
+}
+
 type Provincia {
     provinciacod: String,
     provincia: String,
@@ -32,28 +56,6 @@ type Canton {
 type Distrito {
     distritocod: String,
     distrito: String
-}
-
-type Mutation {
-    crearPersona(nombreusuario: String!, contrasenia: String!, nombre: String!, apellido1: String!, apellido2: String!, email: String!,
-     fechadenacimiento: String!, nacionalidad: String!): Result!,
-    actualizarPersona(persona: PersonaInput): Result!,
-    agregarIdiomasPorPersona(nombreusuario: String!, idiomas: [IdiomaInput]): Result!,
-    agregarEstudiosPorPersona(nombreusuario: String, estudios: [EstudioInput]): Result!,
-    agregarCertificacionesPorPersona(nombreusuario: String!, certificaciones: [CertificacionInput]): Result!,
-    agregarExperienciasPorPersona(nombreusuario: String!, experiencia: [ExperienciaInput]): Result!,
-    agregarDominioPorExperiencia(numeroexperiencia: Int!, nombreusuario: String!, dominios: [DominioExperienciaInput]): Result!
-
-    crearEmpresa(nombreusuario: String!, contrasenia: String!, email: String!, nombre: String!): Result!,
-    crearConcurso(empresa: String!, nombredelpuesto: String!, fechaderegistro: String!, fechadecaducidad: String!, descripcion: String!): Result!,
-    agregarCertificacionesPorConcurso(idconcurso: Int!, certificaciones: [CertificacionConcursoInput]): Result!,
-    agregarDominiosPorConcurso(idconcurso: Int!, dominios: [DominioConcursoInput]): Result!,
-    agregarIdiomasPorConcurso(idconcurso: Int!, idiomas: [IdiomaConcursoInput]): Result!,
-    agregarResponsabilidadesPorConcurso(idconcurso: Int!, responsabilidades: [String]): Result!,
-
-    agregarPersonaConcurso(nombreusuario: String!, idconcurso: Int): Result!,
-
-    actualizarPersonaImage(nombreusuario: String, fotografia: String): Result!,
 }
 
 type TipoSoftware {
@@ -190,6 +192,21 @@ input DominioExperienciaInput {
     nombredellenguaje: String!,
     idtipo: Int!
 }
+
+
+input EmpresaInput {
+    nombreusuario: String!,
+    email: String!,
+    nombre: String!,
+    nombrecontacto: String,
+    telefono1: String,
+    telefono2: String,
+    sitioweb: String,
+    provincia: String,
+    canton: String,
+    distrito: String,
+}
+
 
 type Empresa {
     nombreusuario: String!,

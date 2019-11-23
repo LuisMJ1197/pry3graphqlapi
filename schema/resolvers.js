@@ -64,10 +64,10 @@ const resolvers = {
 		agregarIdiomasPorConcurso: mutations.agregarIdiomasPorConcurso,
 		agregarResponsabilidadesPorConcurso: mutations.agregarResponsabilidadesPorConcurso,
 		agregarPersonaConcurso: mutations.agregarPersonaConcurso,
-		actualizarPersonaImage: mutations.actualizarPersonaImage
+		actualizarPersonaImage: mutations.actualizarPersonaImage,
+		actualizarEmpresaImage: mutations.actualizarEmpresaImage,
+		actualizarEmpresa: mutations.actualizarEmpresa
 	}
 }
 
 exports.resolvers = resolvers;
-
-//actualizarPersona(nombreusuario: String!, contrasenia: String!, apellido1: String!, apellido2: String!, email: String!, nombre: String!,

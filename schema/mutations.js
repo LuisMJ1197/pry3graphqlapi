@@ -25,6 +25,20 @@ const actualizarPersona = (parent, args) => {
   
 }
 
+const actualizarEmpresa = (parent, args) => {
+  const query = `UPDATE empresas
+  SET email=$2, nombre=$3, nombrecontacto=$4,
+  provincia=$5, canton=$6, distrito=$7, telefono1=$8, telefono2=$9, sitioweb=$10 WHERE nombreusuario=$1; SELECT 1;`;
+  console.log(args);
+  const values = [args.empresa.nombreusuario, args.empresa.email, args.empresa.nombre, args.empresa.nombrecontacto,
+   args.empresa.provincia, args.empresa. canton, args.empresa. distrito, args.empresa. telefono1, args.empresa.telefono2, args.empresa.sitioweb];
+  return db
+    .one(query, values)
+    .then(res => res = {success: true, message: "Empresa actualizada."})
+    .catch(err => {console.log(err); return {success: false, message: messages.getMessage(err.code)};}); //err = {success: false, message: messages.getMessage(err.code)}
+
+}
+
 const actualizarPersonaImage = (parent, args) => {
   const query = `UPDATE personas SET fotografia = $1 WHERE nombreusuario = $2`;
   const values = [args.fotografia, args.nombreusuario]
@@ -33,6 +47,15 @@ const actualizarPersonaImage = (parent, args) => {
     .then(res => res = {success: true, message: "Persona actualizada."})
     .catch(err => err = {success: false, message: messages.getMessage(err.code)}); //err = {success: false, message: messages.getMessage(err.code)}
 
+}
+
+const actualizarEmpresaImage = (parent, args) => {
+  const query = `UPDATE empresas SET logo = $1 WHERE nombreusuario = $2`;
+  const values = [args.logo, args.nombreusuario]
+  return db
+    .oneOrNone(query, values)
+    .then(res => res = {success: true, message: "Empresa actualizada."})
+    .catch(err => err = {success: false, message: messages.getMessage(err.code)}); //err = {success: false, message: messages.getMessage(err.code)}
 }
 
 const agregarIdiomasPorPersona = (parent, args) => {
@@ -324,5 +347,7 @@ module.exports = {
     agregarIdiomasPorConcurso,
     agregarResponsabilidadesPorConcurso,
     agregarPersonaConcurso,
-    actualizarPersonaImage
+    actualizarPersonaImage,
+    actualizarEmpresaImage,
+    actualizarEmpresa
 }
