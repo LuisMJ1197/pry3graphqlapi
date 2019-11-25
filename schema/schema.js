@@ -7,8 +7,8 @@ type Query {
     concursos: [Concurso],
     getPersonaConcurso(idconcurso: Int): [Persona],
     getDirecciones: [Provincia],
-    getIdiomas: [IdiomaUtil],
-    getTiposSoftware: [TipoSoftware],
+    getIdiomas: [String],
+    getTiposSoftware: [String],
     getNivelesIdioma: [String],
     getPaises: [String],
     getTipoInstitucion: [String],
@@ -23,12 +23,13 @@ type Mutation {
     agregarIdiomasPorPersona(nombreusuario: String!, idiomas: [IdiomaInput]): Result!,
     agregarEstudiosPorPersona(nombreusuario: String, estudios: [EstudioInput]): Result!,
     agregarCertificacionesPorPersona(nombreusuario: String!, certificaciones: [CertificacionInput]): Result!,
-    agregarExperienciasPorPersona(nombreusuario: String!, experiencia: [ExperienciaInput]): Result!,
+    agregarExperienciasPorPersona(nombreusuario: String!, experiencias: [ExperienciaInput]): Result!,
     agregarDominioPorExperiencia(numeroexperiencia: Int!, nombreusuario: String!, dominios: [DominioExperienciaInput]): Result!
 
     crearEmpresa(nombreusuario: String!, contrasenia: String!, email: String!, nombre: String!): Result!,
     actualizarEmpresa(empresa: EmpresaInput): Result!,
-    crearConcurso(empresa: String!, nombredelpuesto: String!, fechaderegistro: String!, fechadecaducidad: String!, descripcion: String!): Result!,
+    crearConcurso(concurso: ConcursoInput): Int!,
+    
     agregarCertificacionesPorConcurso(idconcurso: Int!, certificaciones: [CertificacionConcursoInput]): Result!,
     agregarDominiosPorConcurso(idconcurso: Int!, dominios: [DominioConcursoInput]): Result!,
     agregarIdiomasPorConcurso(idconcurso: Int!, idiomas: [IdiomaConcursoInput]): Result!,
@@ -38,6 +39,8 @@ type Mutation {
 
     actualizarPersonaImage(nombreusuario: String, fotografia: String): Result!,
     actualizarEmpresaImage(nombreusuario: String, logo: String): Result!,
+    actualizarConcurso(concurso: ConcursoInput): Result!,
+    eliminarConcurso(idconcurso: Int!): Result!,
 }
 
 type Provincia {
@@ -61,11 +64,6 @@ type Distrito {
 type TipoSoftware {
     idtipo: String!,
     nombre: String!
-}
-
-type IdiomaUtil {
-    id: Int!,
-    name: String!
 }
 
 type Direccion {
@@ -112,30 +110,28 @@ type Persona {
     fotografia: String,
     estudios: [Estudio],
     experiencias: [Experiencia],
-    idiomas: [String],
+    idiomas: [Idioma],
     certificaciones: [Certificacion]
 }
 
 type Idioma {
-    ididioma: Int!,
+    idioma: String!,
     nivelidioma: String!
 }
 
 input IdiomaInput {
-    ididioma: Int!,
+    idioma: String!,
     nivelidioma: String!
 }
 
 type Estudio {
     gradoobtenido: String!,
-    tipodeinstitucion: String!,
     nombreinstitucion: String!,
     anio: String!
 }
 
 input EstudioInput {
     gradoobtenido: String!,
-    tipodeinstitucion: String!,
     nombreinstitucion: String!,
     anio: String!
 }
@@ -143,7 +139,6 @@ input EstudioInput {
 type Certificacion {
     numeroCertificacion: Int,
     titulo: String!,
-    tipodeinstitucion: String!,
     nombreinstitucion: String!,
     anio: String!
 }
@@ -151,7 +146,6 @@ type Certificacion {
 input CertificacionInput {
     numeroCertificacion: Int,
     titulo: String!,
-    tipodeinstitucion: String!,
     nombreinstitucion: String!,
     anio: String!
 }
@@ -162,7 +156,7 @@ type Experiencia {
     cargo: String!,
     fechadeingreso: String!,
     fechadesalida: String!,
-    trabajactual: String!,
+    trabajactual: Boolean!,
     descripcion: String!,
     dominios: [DominioExperiencia]
 }
@@ -173,24 +167,25 @@ input ExperienciaInput {
     cargo: String!,
     fechadeingreso: String!,
     fechadesalida: String!,
-    trabajactual: String!,
-    descripcion: String!
+    trabajactual: Boolean!,
+    descripcion: String!,
+    dominios: [String]
 }
 
 type DominioExperiencia {
-    numeroexperiencia: Int!,
-    nombreusuario: String!,
-    numerodominio: Int!,
-    nombredellenguaje: String!,
-    tipo: String
-}
-
-input DominioExperienciaInput {
     numeroexperiencia: Int,
     nombreusuario: String,
     numerodominio: Int,
+    nombredellenguaje: String,
+    tipodesoftware: String
+}
+
+input DominioExperienciaInput {
+    numeroexperiencia: Int!,
+    nombreusuario: String,
+    numerodominio: Int,
     nombredellenguaje: String!,
-    idtipo: Int!
+    tipodesoftware: String!
 }
 
 
@@ -259,6 +254,7 @@ input IdiomaConcursoInput {
 type Concurso {
     idconcurso: Int,
     empresa: String!,
+    nombreempresa: String,
     nombredelpuesto: String!,
     fechaderegistro: String!,
     fechadecaducidad: String!,
@@ -267,6 +263,16 @@ type Concurso {
     dominios: [DominioConcurso],
     idiomas: [IdiomaConcurso],
     responsabilidades: [String]
+}
+
+input ConcursoInput {
+    idconcurso: Int,
+    empresa: String!,
+    nombreempresa: String,
+    nombredelpuesto: String!,
+    fechaderegistro: String!,
+    fechadecaducidad: String!,
+    descripcion: String!
 }
 
 type Result {

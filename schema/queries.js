@@ -19,7 +19,7 @@ const empresaLogin = (parent, args) => {
 }
 
 const getConcursos = (parent, args) => {
-    const query = `SELECT * FROM concursos`;
+    const query = `SELECT * FROM concursosV`;
     return db
       .multi(query, [])
       .then(res => res[0])
@@ -45,7 +45,7 @@ function getPersonaEstudios(parent) {
 }
 
 function getPersonaExperiencias(parent) {
-    const query = `SELECT * FROM experiencias WHERE nombreusuario=$1`;
+    const query = `SELECT * FROM experienciasV WHERE nombreusuario=$1`;
     values = [parent.nombreusuario];
     return db
         .multi(query, values)
@@ -72,12 +72,11 @@ function getNombreLenguaje(parent) {
 }
 
 function getPersonaIdiomas(parent) {
-    const query = `SELECT languages.name FROM idiomasporpersona, languages
-                   WHERE nombreusuario=$1 AND languages.id = idiomasporpersona.ididioma`;
+    const query = `SELECT idioma, nivelidioma FROM idiomasporpersona WHERE nombreusuario = $1`;
     const values = [parent.nombreusuario];
     return db
         .multi(query, values)
-        .then(res => res[0].map(x => x.name))
+        .then(res => res[0])
         .catch(err => err);
 }
 
@@ -127,7 +126,7 @@ function getConcursoIdiomas(parent) {
 }
 
 function getEmpresaConcursos(parent) {
-    const query = `SELECT * FROM concursos WHERE empresa=$1`;
+    const query = `SELECT * FROM concursosV WHERE empresa=$1`;
     const values = [parent.nombreusuario];
     return db
         .multi(query, values)
@@ -194,18 +193,18 @@ function getDistritosPorCanton(parent) {
 }
 
 const getIdiomas = (parent, args) => {
-    const query = `SELECT * FROM languages`;
+    const query = `SELECT name FROM languages ORDER BY name`;
     return db
         .multi(query, [])
-        .then(res => res[0])
+        .then(res => res[0].map(x => x.name))
         .catch(err => err);
 }
 
 const getTiposSoftware = (parent, args) => {
-    const query = `SELECT * FROM tiposoftware`;
+    const query = `SELECT nombre FROM tiposoftware`;
     return db
         .multi(query, [])
-        .then(res => res[0])
+        .then(res => res[0].map(x => x.nombre))
         .catch(err => err);
 }
 

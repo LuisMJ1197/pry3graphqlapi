@@ -27,17 +27,11 @@ const resolvers = {
 	Experiencia: {
 		dominios(parent, args, cts, info) { return queries.getExperienciaDominios(parent); },
 	},
-	DominioExperiencia: {
-		tipo(parent, args, cts, info) { return queries.getNombreLenguaje(parent); }
-	},
 	Concurso: {
 		certificaciones(parent, args, cts, info) { return queries.getConcursoCertificaciones(parent); },
 		dominios(parent, args, cts, info) { return queries.getConcursoDominios(parent); },
 		idiomas(parent, args, cts, info) { return queries.getConcursoIdiomas(parent); },
 		responsabilidades(parent, args, cts, info) { return queries.getConcursoResponsabilidades(parent); }
-	},
-	DominioConcurso: {
-		tipo(parent, args, cts, info) { return queries.getNombreLenguaje(parent); }
 	},
 	Empresa: {
 		concursos(parent, args, cts, info) { return queries.getEmpresaConcursos(parent); }
@@ -66,7 +60,9 @@ const resolvers = {
 		agregarPersonaConcurso: mutations.agregarPersonaConcurso,
 		actualizarPersonaImage: mutations.actualizarPersonaImage,
 		actualizarEmpresaImage: mutations.actualizarEmpresaImage,
-		actualizarEmpresa: mutations.actualizarEmpresa
+		actualizarEmpresa: mutations.actualizarEmpresa,
+		actualizarConcurso: mutations.actualizarConcurso,
+		eliminarConcurso: mutations.eliminarConcurso
 	}
 }
 

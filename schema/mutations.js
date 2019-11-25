@@ -65,7 +65,7 @@ const agregarIdiomasPorPersona = (parent, args) => {
     var codes = "{";
     var levels = "{";
     for (i = 0; i < idiomas.length; i++) {
-      codes = codes.concat(args.idiomas[i].ididioma);
+      codes = codes.concat(args.idiomas[i].idioma);
       levels = levels.concat(args.idiomas[i].nivelidioma);
       if (i + 1 != idiomas.length) {
         codes = codes.concat(",");
@@ -77,73 +77,65 @@ const agregarIdiomasPorPersona = (parent, args) => {
     return db
       .one(query, [nombreusuario, codes, levels])
       .then(res => res = {success: true, message: "Idiomas guardados."})
-      .catch(err => err = {success: false, message: messages.getMessage(err.code)}); //res = {success: false, message: messages.getMessage(err.code)}
+      .catch(err => {console.log(err); return {success: false, message: messages.getMessage(err.code)}}); //res = {success: false, message: messages.getMessage(err.code)}
 }
 
 const agregarEstudiosPorPersona = (parent, args) => {
-    const query = `SELECT * FROM agregarEstudiosPorUsuarios($1, $2, $3, $4, $5, $6)`;
+    const query = `SELECT * FROM agregarEstudiosPorUsuarios($1, $2, $3, $4, $5)`;
     const nombreusuario = args.nombreusuario;
     const estudios = args.estudios;
     var numeroestudio = "{";
     var grados = "{";
-    var tipoinsti = "{";
     var nombreinsti = "{";
     var anio = "{";
     for (i = 0; i < estudios.length; i++) {
       numeroestudio = numeroestudio.concat(i + 1);
       grados = grados.concat(args.estudios[i].gradoobtenido);
-      tipoinsti = tipoinsti.concat(args.estudios[i].tipodeinstitucion);
       nombreinsti = nombreinsti.concat(args.estudios[i].nombreinstitucion);
       anio = anio.concat(args.estudios[i].anio);
       if (i + 1 != estudios.length) {
         numeroestudio = numeroestudio.concat(",");
         grados = grados.concat(",");
-        tipoinsti = tipoinsti.concat(",");
         nombreinsti = nombreinsti.concat(",");
         anio = anio.concat(",");
       }
     }
     numeroestudio = numeroestudio.concat("}");
     grados = grados.concat("}");
-    tipoinsti = tipoinsti.concat("}");
     nombreinsti = nombreinsti.concat("}");
     anio = anio.concat("}");
     return db
-      .one(query, [nombreusuario, numeroestudio, grados, tipoinsti, nombreinsti, anio])
+      .one(query, [nombreusuario, numeroestudio, grados, nombreinsti, anio])
       .then(res => res = {success: true, message: "Estudios guardados."})
-      .catch(err => err = {success: false, message: messages.getMessage(err.code)}); //res = {success: false, message: messages.getMessage(err.code)}
+      .catch(err => {console.log(err); return {success: false, message: messages.getMessage(err.code)}}); //res = {success: false, message: messages.getMessage(err.code)}
 }
 
 const agregarCertificacionesPorPersona = (parent, args) => {
-    const query = `SELECT * FROM agregarCertificacionesPorUsuarios($1, $2, $3, $4, $5, $6)`;
+    const query = `SELECT * FROM agregarCertificacionesPorUsuarios($1, $2, $3, $4, $5)`;
     const nombreusuario = args.nombreusuario;
     const certificaciones = args.certificaciones;
     var numerocertificacion = "{";
     var titulos = "{";
-    var tipoinsti = "{";
     var nombreinsti = "{";
     var anio = "{";
     for (i = 0; i < certificaciones.length; i++) {
       numerocertificacion = numerocertificacion.concat(i + 1);
       titulos = titulos.concat(args.certificaciones[i].titulo);
-      tipoinsti = tipoinsti.concat(args.certificaciones[i].tipodeinstitucion);
       nombreinsti = nombreinsti.concat(args.certificaciones[i].nombreinstitucion);
       anio = anio.concat(args.certificaciones[i].anio);
       if (i + 1 != certificaciones.length) {
         numerocertificacion = numerocertificacion.concat(",");
         titulos = titulos.concat(",");
-        tipoinsti = tipoinsti.concat(",");
         nombreinsti = nombreinsti.concat(",");
         anio = anio.concat(",");
       }
     }
     numerocertificacion = numerocertificacion.concat("}");
     titulos = titulos.concat("}");
-    tipoinsti = tipoinsti.concat("}");
     nombreinsti = nombreinsti.concat("}");
     anio = anio.concat("}");
     return db
-      .one(query, [nombreusuario, numerocertificacion, titulos, tipoinsti, nombreinsti, anio])
+      .one(query, [nombreusuario, numerocertificacion, titulos, nombreinsti, anio])
       .then(res => res = {success: true, message: "Certificaciones guardadas."})
       .catch(err => err = {success: false, message: messages.getMessage(err.code)}); //err = {success: false, message: messages.getMessage(err.code)}
 }
@@ -187,7 +179,7 @@ const agregarExperienciasPorPersona = (parent, args) => {
     return db
       .one(query, [nombreusuario, numeroexperiencias, empresas, cargos, fechasdeingreso, fechasdesalidas, trabajosactual, descripcion])
       .then(res => res = {success: true, message: "Experiencias guardadas."})
-      .catch(err => err = {success: false, message: messages.getMessage(err.code)}); //err = {success: false, message: messages.getMessage(err.code)}
+      .catch(err => {console.log(err); return err = {success: false, message: messages.getMessage(err.code)}}); //err = {success: false, message: messages.getMessage(err.code)}
 }
 
 const agregarDominioPorExperiencia = (parent, args) => {
@@ -198,10 +190,11 @@ const agregarDominioPorExperiencia = (parent, args) => {
     var numerosdominio = "{";
     var nombresdellenguaje = "{";
     var idstipos = "{";
+    console.log(nombreusuario);
     for (i = 0; i < dominios.length; i++) {
       numerosdominio = numerosdominio.concat( i + 1);
       nombresdellenguaje = nombresdellenguaje.concat(args.dominios[i].nombredellenguaje);
-      idstipos = idstipos.concat(args.dominios[i].idtipo);
+      idstipos = idstipos.concat(args.dominios[i].tipodesoftware);
       if (i + 1 != dominios.length) {
         numerosdominio = numerosdominio.concat(",");
         nombresdellenguaje = nombresdellenguaje.concat(",");
@@ -214,7 +207,7 @@ const agregarDominioPorExperiencia = (parent, args) => {
     return db
       .one(query, [numeroexperiencia, nombreusuario, numerosdominio, nombresdellenguaje, idstipos])
       .then(res => res = {success: true, message: "Dominios guardados."})
-      .catch(err => err = {success: false, message: messages.getMessage(err.code)}); //err = {success: false, message: messages.getMessage(err.code)}
+      .catch(err => {console.log(err); return err = {success: false, message: messages.getMessage(err.code)}}); //err = {success: false, message: messages.getMessage(err.code)}
 }
 
 const crearEmpresa = (parent, args) => {
@@ -227,12 +220,22 @@ const crearEmpresa = (parent, args) => {
 }
 
 const crearConcurso = (parent, args) => {
-    const query = `SELECT * FROM crearConcurso($1, $2, $3, $4, $5)`;
-    const values = [args.empresa, args.nombredelpuesto, args.fechaderegistro, args.fechadecaducidad, args.descripcion];
+    const query = `SELECT * FROM crearConcurso($1, $2, $3, $4, $5, $6)`;
+    const values = [args.concurso.empresa, args.concurso.nombreempresa, args.concurso.nombredelpuesto, args.concurso.fechaderegistro, args.concurso.fechadecaducidad, args.concurso.descripcion];
     return db
       .one(query, values)
-      .then(res => res = {success: true, message: "Concurso registrado."})
-      .catch(err => err = {success: false, message: messages.getMessage(err.code)});//err = {success: false, message: messages.getMessage(err.code)}
+      .then(res => res.crearconcurso)
+      .catch(err => { console.log(err); return -1}); //err = {success: false, message: messages.getMessage(err.code)}
+}
+
+const actualizarConcurso = (parent, args) => {
+  const query = `UPDATE concursos SET nombredelpuesto = $1, fechaderegistro = $2,
+                  fechadecaducidad = $3, descripcion = $4 WHERE idconcurso = $5;`;
+  const values = [args.concurso.nombredelpuesto, args.concurso.fechaderegistro, args.concurso.fechadecaducidad, args.concurso.descripcion, args.concurso.idconcurso];
+  return db
+    .none(query, values)
+    .then(res => res = {success: true, message: "Success"})
+    .catch(err => { console.log(err); return {success: false, message: messages.getMessage(err.code)}});//err = {success: false, message: messages.getMessage(err.code)}
 }
 
 const agregarCertificacionesPorConcurso = (parent, args) => {
@@ -332,6 +335,15 @@ const agregarPersonaConcurso = (parent, args) => {
       .catch(err => err = {success: false, message: messages.getMessage(err.code)});
 }
 
+const eliminarConcurso = (parent, args) => {
+  const query = `SELECT * FROM eliminarConcurso($1)`;
+    const values = [args.idconcurso];
+    return db
+      .one(query, values)
+      .then(res => res = {success: true, message: "Concurso eliminado"})
+      .catch(err => {console.log(err); return {success: false, message: messages.getMessage(err.code)}});
+}
+
 module.exports = {
     crearPersona,
     actualizarPersona,
@@ -349,5 +361,7 @@ module.exports = {
     agregarPersonaConcurso,
     actualizarPersonaImage,
     actualizarEmpresaImage,
-    actualizarEmpresa
+    actualizarEmpresa,
+    actualizarConcurso,
+    eliminarConcurso
 }
